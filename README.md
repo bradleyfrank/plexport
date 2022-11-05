@@ -17,7 +17,7 @@ Your `baseurl` is the address of your Plex server.
 
 The value of `library` is the name of your Music library in Plex.
 
-To find your Plex token, navigate to `/Library/Application Support/Plex Media Server/` and run:
+To find your Plex `token`, navigate to `/Library/Application Support/Plex Media Server/` and run:
 
 ```sh
 tr ' ' '\n' < Preferences.xml | grep PlexOnlineToken
@@ -27,6 +27,6 @@ tr ' ' '\n' < Preferences.xml | grep PlexOnlineToken
 
 ```sh
 pip install -r requirements.txt
-./plexex.py -a <album> [-l <library]
+./plexex.py -a <album> [-l <library>]
 ```
 
