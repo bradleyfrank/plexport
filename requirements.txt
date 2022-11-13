@@ -1,5 +1,6 @@
 black
 inquirer
 isort
+logzero
 plexapi
 pylint

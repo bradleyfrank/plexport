@@ -23,10 +23,25 @@ To find your Plex `token`, navigate to `/Library/Application Support/Plex Media 
 tr ' ' '\n' < Preferences.xml | grep PlexOnlineToken
 ```
 
-## Usage
+## Installation
 
 ```sh
 pip install -r requirements.txt
-./plexex.py -a <album> [-l <library>]
+```
+
+## Usage
+
+```sh
+usage: plexex [-h] [-a ALBUM] [-l LIBRARY] [-f FILE] [-c] [-d]
+
+options:
+  -h, --help            show this help message and exit
+  -a ALBUM, --album ALBUM
+                        album title
+  -l LIBRARY, --library LIBRARY
+                        plex library
+  -f FILE, --file FILE  save output to file
+  -c, --csv             output in csv format
+  -d, --debug           enable debug output
 ```
 
