@@ -131,7 +131,7 @@ match flags.output:
             writer.writerow(convert_nested_lists(item))
     case "json":
         print(json.dumps([dict(zip(headers, item)) for item in metadata], indent=1))
-    case "console":
+    case "human":
         for item in metadata:
             for index, value in enumerate(convert_nested_lists(item)):
                 print(f"{headers[index]}: {value}")
