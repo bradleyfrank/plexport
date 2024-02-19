@@ -1,13 +1,13 @@
-# plexex
+# plexport
 
-Export track ratings and mood tags from a music album.
+Export album and track metadata from Plex.
 
 ## Config
 
-Create a config file `plexex.cfg` with the following:
+Create a config file `plexport.cfg` with the following:
 
 ```ini
-[plexex]
+[plexport]
 baseurl =
 token =
 library =
@@ -32,16 +32,18 @@ pip install -r requirements.txt
 ## Usage
 
 ```sh
-usage: plexex [-h] [-a ALBUM] [-l LIBRARY] [-f FILE] [-c] [-d]
+usage: plexport [-h] [-a ALBUM] [-l LIBRARY] [-d] [-m {album,tracks}]
+                [-o {csv,json,human}]
 
 options:
   -h, --help            show this help message and exit
   -a ALBUM, --album ALBUM
-                        album title
+                        album(s) to match
   -l LIBRARY, --library LIBRARY
                         plex library
-  -f FILE, --file FILE  save output to file
-  -c, --csv             output in csv format
   -d, --debug           enable debug output
+  -m {album,tracks}, --metadata {album,tracks}
+                        type of metadata to fetch
+  -o {csv,json,human}, --output {csv,json,human}
+                        how to format metadata
 ```
-
