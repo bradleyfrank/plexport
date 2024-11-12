@@ -10,11 +10,33 @@ import json
 import sys
 from configparser import ConfigParser, NoOptionError
 from itertools import chain
-from typing import Type
+from pathlib import PosixPath
+from typing import TextIO, Type
 
 import inquirer
 from logzero import setup_logger
 from plexapi import audio, server
+
+
+def output_csv(plex_data: list, titles: list, destination: TextIO) -> None:
+    """Output in csv format."""
+    writer = csv.writer(destination, quoting=csv.QUOTE_ALL)
+    writer.writerow(titles)
+    for item in plex_data:
+        writer.writerow(convert_nested_lists(item))
+
+
+def output_json(plex_data: list, titles: list, destination: TextIO) -> None:
+    """Output in json format."""
+    destination.write(json.dumps([dict(zip(titles, item)) for item in plex_data], indent=1))
+
+
+def output_human(plex_data: list, titles: list, destination: TextIO) -> None:
+    """Output in human readable text."""
+    for item in plex_data:
+        for index, value in enumerate(convert_nested_lists(item)):
+            destination.write(f"{titles[index]}: {value}\n")
+        destination.write("\n")
 
 
 def select_albums(title: str) -> list:
@@ -64,6 +86,7 @@ args = argparse.ArgumentParser(prog="plexport")
 args.add_argument("-a", "--album", help="album(s) to match", type=str)
 args.add_argument("-l", "--library", help="plex library", type=str)
 args.add_argument("-d", "--debug", help="enable debug output", action="store_true")
+args.add_argument("-o", "--output", help="output destination", type=PosixPath)
 args.add_argument(
     "-m",
     "--metadata",
@@ -72,8 +95,8 @@ args.add_argument(
     default="album",
 )
 args.add_argument(
-    "-o",
-    "--output",
+    "-f",
+    "--format",
     help="how to format metadata",
     choices=["csv", "json", "human"],
     default="human",
@@ -123,19 +146,12 @@ match flags.metadata:
         LZ.error("Unknown metadata format.")
         sys.exit(1)
 
-match flags.output:
-    case "csv":
-        writer = csv.writer(sys.stdout, quoting=csv.QUOTE_ALL)
-        writer.writerow(headers)
-        for item in metadata:
-            writer.writerow(convert_nested_lists(item))
-    case "json":
-        print(json.dumps([dict(zip(headers, item)) for item in metadata], indent=1))
-    case "human":
-        for item in metadata:
-            for index, value in enumerate(convert_nested_lists(item)):
-                print(f"{headers[index]}: {value}")
-            print()
-    case _:
-        LZ.error("Unknown output.")
-        sys.exit(1)
+output_functions = {"csv": output_csv, "json": output_json, "human": output_human}
+write_function = output_functions[flags.format]
+
+if flags.output:
+    dest = flags.output / "output" if flags.output.is_dir() else flags.output
+    with open(dest, "w", newline="", encoding="utf-8") as fd:
+        write_function(metadata, headers, fd)
+else:
+    write_function(metadata, headers, sys.stdout)
