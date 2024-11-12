@@ -32,8 +32,8 @@ pip install -r requirements.txt
 ## Usage
 
 ```sh
-usage: plexport [-h] [-a ALBUM] [-l LIBRARY] [-d] [-m {album,tracks}]
-                [-o {csv,json,human}]
+usage: plexport [-h] [-a ALBUM] [-l LIBRARY] [-d] [-o OUTPUT]
+                [-m {album,tracks}] [-f {csv,json,human}]
 
 options:
   -h, --help            show this help message and exit
@@ -42,8 +42,10 @@ options:
   -l LIBRARY, --library LIBRARY
                         plex library
   -d, --debug           enable debug output
+  -o OUTPUT, --output OUTPUT
+                        output destination
   -m {album,tracks}, --metadata {album,tracks}
                         type of metadata to fetch
-  -o {csv,json,human}, --output {csv,json,human}
+  -f {csv,json,human}, --format {csv,json,human}
                         how to format metadata
 ```
